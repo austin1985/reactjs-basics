@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from './Cockpit.css'
+import Aux from '../../hoc/Aux'
 
 
 
@@ -17,12 +17,7 @@ const cockpit = (props) => {
       };
 
     const assignClasses = [];
-    let btnClass = ''
 
-    if(props.showPersons){
-
-        btnClass = classes.red;
-    }
 
     if (props.persons.length <= 2) {
 
@@ -37,13 +32,13 @@ const cockpit = (props) => {
     }
 
     return(
-        <div>
-        <h1>Hi im a react app!</h1>
-        <p className={assignClasses.join(' ')}>This is working</p>
-        <button 
-          style={style}
-          onClick={props.clicked}>Toggle names</button>
-        </div>  
+        <Aux>
+            <h1>Hi im a react app!</h1>
+            <p className={assignClasses.join(' ')}>This is working</p>
+            <button 
+                style={style}
+                onClick={props.clicked}>Toggle names</button>
+        </Aux>  
     );
 
 }

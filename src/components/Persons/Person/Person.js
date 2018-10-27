@@ -1,17 +1,50 @@
-import React from 'react';
+import React , {Component} from 'react';
 import './Person.css';
 import Radium from 'radium';
+import PropTypes from 'prop-types';
 
-const person = (props) => {
-    
-    return (
-    <div className="Person" >
-        <p onClick={props.click}>Im {props.name} and I am {props.age} years old!</p>
-        <p>{props.children}</p>
-        <input type="text" onChange={props.changed} value={props.name}/>
-    </div>
-    );
+class Person extends Component {
 
-};
+    constructor(props) {
+        super(props);
+        this.inputElement = React.createRef();
+    }
 
-export default Radium(person);
+    // componentDidMount () {
+
+
+    // }
+
+    focusInput(){
+       
+            this.inputElement.current.focus();
+        
+    }
+
+    render() {
+
+        return (<div className="Person" >
+        <p onClick={this.props.click}>Im {this.props.name} and I am {this.props.age} years old!</p>
+        <p>{this.props.children}</p>
+        <input 
+        //only in stateful you can use ref
+            ref={this.inputElement} 
+            type="text" 
+            onChange={this.props.changed} 
+            value={this.props.name}/>
+        </div>
+        )
+    }
+
+}
+
+Person.propTypes = {
+
+    click: PropTypes.func,
+    name: PropTypes.string,
+    age: PropTypes.number,
+    changed: PropTypes.func
+
+}
+
+export default Radium(Person);

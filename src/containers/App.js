@@ -1,21 +1,78 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import './App.css';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
 
-class App extends Component {
 
-  state = {
+class App extends PureComponent {
 
-    persons: [
-      { id: 'x123',name: 'Max', age:28 },
-      { id: 'x124',name: 'Mike',age:33 },
-      { id: 'x125',name: 'Stephanie', age:26 }
-    ],
-    otherState:'Other value',
-    showPersons: false
+  constructor(props){
+
+    super(props);
+    console.log('[App.js] Inside constructor',props)
+
+    this.state = {
+
+      persons: [
+        { id: 'x123',name: 'Max', age:28 },
+        { id: 'x124',name: 'Mike',age:33 },
+        { id: 'x125',name: 'Stephanie', age:26 }
+      ],
+      otherState:'Other value',
+      showPersons: false,
+      toggleClicked: 0
+    }
+  }
+
+  componentWillmount(){
+
+    console.log('[App.js] Inside componentWillmount')
 
   }
+
+  componentDidMount(){
+
+    console.log('[App.js] Inside componentDidMount')
+
+
+  }
+
+  componentWillReceiveProps(nextProps){
+
+    console.log('[UPDATE App.js] Inside componentWillReceiveProps', nextProps);
+}
+
+// shouldComponentUpdate(nextProps,nextState) {
+
+//     console.log('[UPDATE App.js] Inside shouldComponentUpdate', nextProps, nextState);
+//     return nextState.persons !== this.state.persons ||
+//       nextState.showPersons !== this.state.showPersons;
+// }
+
+componentWillUpdate(nextProps,nextState){
+
+    console.log('[UPDATE App.js] Inside componentWillUpdate', nextProps, nextState);
+
+}
+
+componentDidUpdate(){
+
+    console.log('[UPDATE App.js] Inside componentDidUpdate');
+
+}
+
+
+  // state = {
+
+  //   persons: [
+  //     { id: 'x123',name: 'Max', age:28 },
+  //     { id: 'x124',name: 'Mike',age:33 },
+  //     { id: 'x125',name: 'Stephanie', age:26 }
+  //   ],
+  //   otherState:'Other value',
+  //   showPersons: false
+
+  // }
 
   //handling the button press
   deletePersonHandler = (personIndex) => {
@@ -46,16 +103,22 @@ class App extends Component {
 
   }
 
-
+  // state changes async
   togglePersonsHandler = () => {
 
       const doesShow = this.state.showPersons;
-      this.setState({showPersons: !doesShow});
+      this.setState((prevState, props)=>{
+        return {
+          showPersons: !doesShow,
+          toggleClicked: prevState.toggleClicked+1
+        }
+
+      });
 
   }
 
   render() {
-
+    console.log('[App.js] Inside render')
 
 
     let persons = null;
@@ -77,13 +140,14 @@ class App extends Component {
     }
 
     return (
-
-      <div className="App">
+      <div className='App'>
+        <button onClick={()=>{this.setState({showPersons: true})}}>Show persons</button>
         <Cockpit 
           showPersons={this.state.showPersons}
           persons={this.state.persons}
           clicked={this.togglePersonsHandler}/>
         {persons}
+      
       </div>
      
     );
