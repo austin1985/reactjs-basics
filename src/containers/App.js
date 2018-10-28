@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import './App.css';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
-
+export const AuthContext = React.createContext(false);
 
 class App extends PureComponent {
 
@@ -18,17 +18,36 @@ class App extends PureComponent {
         { id: 'x124',name: 'Mike',age:33 },
         { id: 'x125',name: 'Stephanie', age:26 }
       ],
+      authenticated: false,
       otherState:'Other value',
       showPersons: false,
       toggleClicked: 0
     }
   }
 
+  
+
   componentWillmount(){
 
     console.log('[App.js] Inside componentWillmount')
 
   }
+
+  //should use instead of componentWillReceiveProps componentWillUpdate
+  static getDerivedStateFromProps(props,state) {
+
+    console.log('[UPDATE App.js] Inside getDerivedStateFromProps', props,state);
+    return state;
+
+  }
+  
+  //gets a snapshot of the current dom, before it changes
+  getSnapshotBeforeUpdate() {
+    console.log('[UPDATE App.js] Inside getSnapshotBeforeUpdate');
+
+  }
+
+
 
   componentDidMount(){
 
@@ -103,6 +122,11 @@ componentDidUpdate(){
 
   }
 
+  loginHandler = () => {
+
+    this.setState({authenticated : true});
+
+  }
   // state changes async
   togglePersonsHandler = () => {
 
@@ -130,9 +154,9 @@ componentDidUpdate(){
         <div>
 
         <Persons 
-        persons={this.state.persons}
-        clicked={this.deletePersonHandler}
-        changed={this.nameChangeHandler}/>
+          persons={this.state.persons}
+          clicked={this.deletePersonHandler}
+          changed={this.nameChangeHandler} />
       </div>
       );
 
@@ -145,8 +169,13 @@ componentDidUpdate(){
         <Cockpit 
           showPersons={this.state.showPersons}
           persons={this.state.persons}
+          login={this.loginHandler}
           clicked={this.togglePersonsHandler}/>
-        {persons}
+          <AuthContext.Provider value={this.state.authenticated}>
+            {persons}
+          </AuthContext.Provider>
+        
+
       
       </div>
      
